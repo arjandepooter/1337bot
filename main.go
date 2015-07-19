@@ -21,9 +21,9 @@ type requestBody struct {
 
 func main() {
 	c := cron.New()
-	c.AddFunc("0 37 13 * * *", func() {
+	c.AddFunc("0 35 13 * * *", func() {
 		fmt.Println("Determine timeout")
-		duration, err := determineTimeout(100, time.Millisecond*50)
+		duration, err := determineTimeout(200, time.Millisecond*50)
 		if err != nil {
 			log.Fatal(err)
 			return
