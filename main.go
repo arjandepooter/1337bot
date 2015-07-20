@@ -7,6 +7,7 @@ import (
 	"github.com/robfig/cron"
 	"log"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -20,6 +21,8 @@ type requestBody struct {
 }
 
 func main() {
+	manualCorrection, _ := strconv.Atoi(os.Getenv("CORRECTION"))
+
 	c := cron.New()
 	c.AddFunc("0 35 13 * * *", func() {
 		fmt.Println("Determine timeout")
@@ -28,7 +31,7 @@ func main() {
 			log.Fatal(err)
 			return
 		}
-		startTime := now.MustParse("13:37:00").Add(-(*duration))
+		startTime := now.MustParse("13:37:00").Add(-(*duration)).Add(time.Millisecond * time.Duration(manualCorrection))
 		<-time.After(startTime.Sub(time.Now()))
 		gorequest.New().Post(URL).Type("form").Send(requestBody{
 			Action: "new",
